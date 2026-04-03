@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: enrollments
+    // Document ID: auto-generated
+    // Fields:
+    //   - courseId: number (required)
+    //   - courseTitle: string (required)
+    //   - timestamp: timestamp (required)
+    //   - userName: string (required)
+    //   - userEmail: string (optional)
+    //
+    // ===============================================================
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+        (request.auth.token.email in ["aikarlijn@gmail.com", "n.uitermark@kentalis.nl"] && request.auth.token.email_verified == true);
+    }
+
+    function isValidEnrollment(data) {
+      return data.courseId is number &&
+             data.courseTitle is string &&
+             data.courseTitle.size() > 0 &&
+             data.courseTitle.size() < 200 &&
+             data.userName is string &&
+             data.userName.size() > 0 &&
+             data.userName.size() < 100 &&
+             data.timestamp is timestamp;
+    }
+
+    match /enrollments/{enrollmentId} {
+      // Anyone can create an enrollment (for the demo, we allow unauthenticated if needed, 
+      // but let's stick to authenticated for better practice if possible. 
+      // However, the prompt implies a simple brochure, so let's allow create for now.)
+      allow create: if isValidEnrollment(request.resource.data);
+      
+      // Only admin can read the full list
+      allow read: if isAdmin();
+      
+      // No updates or deletes allowed for now
+      allow update, delete: if false;
+    }
+  }
+}
