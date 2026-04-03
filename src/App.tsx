@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import { courses, Course } from './data/courses';
 import { auth, db } from './firebase';
 import { 
@@ -158,44 +158,50 @@ export default function App() {
   const handleLogout = () => signOut(auth);
 
   const generatePDF = () => {
-    const doc = new jsPDF();
-    
-    // Header
-    doc.setFontSize(20);
-    doc.setTextColor(225, 29, 72); // rose-600
-    doc.text("Mijn Keuzelijst Scholingen", 14, 22);
-    
-    doc.setFontSize(10);
-    doc.setTextColor(100, 116, 139); // slate-500
-    doc.text(`Naam: ${userName}`, 14, 32);
-    doc.text(`Datum: ${new Date().toLocaleDateString('nl-NL')}`, 14, 37);
-    
-    const totalHours = cart.reduce((acc, item) => acc + (item.totalHours || 0), 0);
-    doc.text(`Totaal indicatie uren: ${totalHours} uur`, 14, 42);
+    try {
+      const doc = new jsPDF();
+      
+      // Header
+      doc.setFontSize(20);
+      doc.setTextColor(225, 29, 72); // rose-600
+      doc.text("Mijn Keuzelijst Scholingen", 14, 22);
+      
+      doc.setFontSize(10);
+      doc.setTextColor(100, 116, 139); // slate-500
+      doc.text(`Naam: ${userName || 'Onbekend'}`, 14, 32);
+      doc.text(`Datum: ${new Date().toLocaleDateString('nl-NL')}`, 14, 37);
+      
+      const totalHours = cart.reduce((acc, item) => acc + (item.totalHours || 0), 0);
+      doc.text(`Totaal indicatie uren: ${totalHours} uur`, 14, 42);
 
-    // Table
-    const tableData = cart.map(item => [
-      `#${item.id}`,
-      item.title,
-      item.category,
-      item.duration || 'n.v.t.'
-    ]);
+      // Table
+      const tableData = cart.map(item => [
+        `#${item.id}`,
+        item.title,
+        item.category,
+        item.duration || 'n.v.t.'
+      ]);
 
-    (doc as any).autoTable({
-      startY: 50,
-      head: [['ID', 'Scholing', 'Categorie', 'Duur']],
-      body: tableData,
-      headStyles: { fillStyle: [225, 29, 72] }, // rose-600
-      styles: { fontSize: 9 },
-      columnStyles: {
-        0: { cellWidth: 15 },
-        1: { cellWidth: 'auto' },
-        2: { cellWidth: 30 },
-        3: { cellWidth: 40 }
-      }
-    });
+      autoTable(doc, {
+        startY: 50,
+        head: [['ID', 'Scholing', 'Categorie', 'Duur']],
+        body: tableData,
+        headStyles: { fillColor: [225, 29, 72] }, // rose-600
+        styles: { fontSize: 9 },
+        columnStyles: {
+          0: { cellWidth: 15 },
+          1: { cellWidth: 'auto' },
+          2: { cellWidth: 30 },
+          3: { cellWidth: 40 }
+        }
+      });
 
-    doc.save(`Keuzelijst_Scholingen_${userName.replace(/\s+/g, '_')}.pdf`);
+      const fileName = `Keuzelijst_Scholingen_${(userName || 'Lijst').replace(/\s+/g, '_')}.pdf`;
+      doc.save(fileName);
+    } catch (error) {
+      console.error("PDF generation failed:", error);
+      alert("Er ging iets mis bij het maken van de PDF. Probeer het opnieuw.");
+    }
   };
 
   const handleExport = () => {
