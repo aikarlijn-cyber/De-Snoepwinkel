@@ -216,9 +216,13 @@ export default function App() {
       const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
       await Promise.all(deletePromises);
       setShowClearConfirm(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error clearing database:", error);
-      alert("Er ging iets mis bij het leegmaken van de database.");
+      if (error.code === 'permission-denied') {
+        alert("Geen toestemming om de database leeg te maken. Controleer of je bent ingelogd met een beheerder-account en of je e-mailadres is geverifieerd.");
+      } else {
+        alert("Er ging iets mis bij het leegmaken van de database: " + (error.message || "Onbekende fout"));
+      }
     } finally {
       setIsClearing(false);
     }

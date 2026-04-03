@@ -24,7 +24,7 @@ service cloud.firestore {
 
     function isAdmin() {
       return isAuthenticated() && 
-        (request.auth.token.email in ["aikarlijn@gmail.com", "n.uitermark@kentalis.nl"] && request.auth.token.email_verified == true);
+        (request.auth.token.email in ["aikarlijn@gmail.com", "n.uitermark@kentalis.nl"]);
     }
 
     function isValidEnrollment(data) {
@@ -39,16 +39,17 @@ service cloud.firestore {
     }
 
     match /enrollments/{enrollmentId} {
-      // Anyone can create an enrollment (for the demo, we allow unauthenticated if needed, 
-      // but let's stick to authenticated for better practice if possible. 
-      // However, the prompt implies a simple brochure, so let's allow create for now.)
+      // Anyone can create an enrollment
       allow create: if isValidEnrollment(request.resource.data);
       
       // Only admin can read the full list
       allow read: if isAdmin();
       
-      // No updates or deletes allowed for now
-      allow update, delete: if false;
+      // Only admin can delete
+      allow delete: if isAdmin();
+      
+      // No updates allowed
+      allow update: if false;
     }
   }
 }
