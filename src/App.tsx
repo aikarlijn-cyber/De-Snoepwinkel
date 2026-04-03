@@ -24,6 +24,7 @@ import {
   LogIn,
   LogOut
 } from 'lucide-react';
+import * as XLSX from 'xlsx';
 import { courses, Course } from './data/courses';
 import { auth, db } from './firebase';
 import { 
@@ -151,6 +152,25 @@ export default function App() {
   };
 
   const handleLogout = () => signOut(auth);
+
+  const handleExport = () => {
+    const exportData = courses
+      .map(course => ({
+        'ID': course.id,
+        'Titel': course.title,
+        'Categorie': course.category,
+        'Aantal Aanmeldingen': enrollmentData[course.id]?.count || 0,
+        'Namen': enrollmentData[course.id]?.names?.join(', ') || ''
+      }))
+      .filter(item => item['Aantal Aanmeldingen'] > 0)
+      .sort((a, b) => b['Aantal Aanmeldingen'] - a['Aantal Aanmeldingen']);
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Aanmeldingen");
+    
+    XLSX.writeFile(workbook, `Snoepwinkel_Aanmeldingen_${new Date().toLocaleDateString('nl-NL')}.xlsx`);
+  };
 
   const filteredCourses = useMemo(() => {
     return courses.filter(course => {
@@ -780,7 +800,7 @@ export default function App() {
                   </p>
                   <button 
                     className="px-6 py-3 bg-slate-900 text-white rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
-                    onClick={() => alert('Export functionaliteit is een demo.')}
+                    onClick={handleExport}
                   >
                     <Download className="w-4 h-4" />
                     Export naar Excel
