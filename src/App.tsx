@@ -21,10 +21,13 @@ import {
   BarChart3,
   Lock,
   Download,
+  DownloadCloud,
   LogIn,
   LogOut
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
 import { courses, Course } from './data/courses';
 import { auth, db } from './firebase';
 import { 
@@ -70,6 +73,7 @@ export default function App() {
   const [enrollmentData, setEnrollmentData] = useState<Record<number, { count: number, names: string[] }>>({});
   const [isAuthReady, setIsAuthReady] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Test connection to Firestore
   useEffect(() => {
@@ -153,6 +157,47 @@ export default function App() {
 
   const handleLogout = () => signOut(auth);
 
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    
+    // Header
+    doc.setFontSize(20);
+    doc.setTextColor(225, 29, 72); // rose-600
+    doc.text("Mijn Keuzelijst Scholingen", 14, 22);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100, 116, 139); // slate-500
+    doc.text(`Naam: ${userName}`, 14, 32);
+    doc.text(`Datum: ${new Date().toLocaleDateString('nl-NL')}`, 14, 37);
+    
+    const totalHours = cart.reduce((acc, item) => acc + (item.totalHours || 0), 0);
+    doc.text(`Totaal indicatie uren: ${totalHours} uur`, 14, 42);
+
+    // Table
+    const tableData = cart.map(item => [
+      `#${item.id}`,
+      item.title,
+      item.category,
+      item.duration || 'n.v.t.'
+    ]);
+
+    (doc as any).autoTable({
+      startY: 50,
+      head: [['ID', 'Scholing', 'Categorie', 'Duur']],
+      body: tableData,
+      headStyles: { fillStyle: [225, 29, 72] }, // rose-600
+      styles: { fontSize: 9 },
+      columnStyles: {
+        0: { cellWidth: 15 },
+        1: { cellWidth: 'auto' },
+        2: { cellWidth: 30 },
+        3: { cellWidth: 40 }
+      }
+    });
+
+    doc.save(`Keuzelijst_Scholingen_${userName.replace(/\s+/g, '_')}.pdf`);
+  };
+
   const handleExport = () => {
     const exportData = courses
       .map(course => ({
@@ -191,6 +236,7 @@ export default function App() {
       }
       return [...prev, course];
     });
+    setIsSubmitted(false);
   };
 
   const isInCart = (courseId: number) => cart.some(item => item.id === courseId);
@@ -577,69 +623,108 @@ export default function App() {
               </div>
 
               <div className="flex-grow overflow-y-auto p-6 space-y-6">
-                {cart.length > 0 && (
-                  <div className="bg-rose-50 rounded-2xl p-5 border border-rose-100 space-y-3">
-                    <label className="text-xs font-bold text-rose-600 uppercase tracking-wider flex items-center gap-2">
-                      <Users className="w-3.5 h-3.5" />
-                      Jouw Naam
-                    </label>
-                    <input 
-                      type="text"
-                      placeholder="Vul je volledige naam in..."
-                      className="w-full px-4 py-3 bg-white border border-rose-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"
-                      value={userName}
-                      onChange={(e) => setUserName(e.target.value)}
-                    />
-                    <p className="text-[10px] text-rose-400 leading-tight">
-                      * Je naam wordt opgeslagen in de database zodat de beheerder weet wie deze scholingen heeft gekozen.
-                    </p>
-                  </div>
-                )}
-
-                {cart.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-50">
-                    <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center">
-                      <ShoppingBasket className="w-10 h-10 text-slate-300" />
+                {isSubmitted ? (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="h-full flex flex-col items-center justify-center text-center space-y-6"
+                  >
+                    <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
+                      <CheckCircle2 className="w-10 h-10" />
                     </div>
-                    <div>
-                      <p className="font-medium text-slate-900">Je mandje is nog leeg</p>
-                      <p className="text-sm text-slate-500">Kies een scholing om deze hier te verzamelen.</p>
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-bold text-slate-900">Verzonden!</h3>
+                      <p className="text-sm text-slate-500 max-w-[250px] mx-auto">
+                        Je keuzelijst is gemaild naar je leidinggevende en opgeslagen in het systeem.
+                      </p>
                     </div>
-                  </div>
-                ) : (
-                  cart.map(item => (
-                    <div 
-                      key={item.id}
-                      className="group bg-slate-50 rounded-2xl p-4 border border-slate-100 flex gap-4 items-start"
-                    >
-                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-400 font-bold text-sm border border-slate-200 shrink-0">
-                        {item.id}
-                      </div>
-                      <div className="flex-grow">
-                        <h4 className="text-sm font-bold text-slate-900 line-clamp-1 mb-1">{item.title}</h4>
-                        <div className="flex items-center gap-3 text-[10px] text-slate-400 font-medium">
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {item.duration?.split('(')[0]}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <MapPin className="w-3 h-3" />
-                            {item.location}
-                          </span>
-                        </div>
-                      </div>
+                    <div className="w-full pt-4 space-y-3">
                       <button 
-                        onClick={() => toggleCartItem(item)}
-                        className="p-2 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
+                        onClick={generatePDF}
+                        className="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <DownloadCloud className="w-5 h-5" />
+                        Download als PDF
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setIsSubmitted(false);
+                          setCart([]);
+                          setIsCartOpen(false);
+                        }}
+                        className="w-full py-4 text-slate-400 font-bold text-sm hover:text-slate-600 transition-colors"
+                      >
+                        Sluiten
                       </button>
                     </div>
-                  ))
+                  </motion.div>
+                ) : (
+                  <>
+                    {cart.length > 0 && (
+                      <div className="bg-rose-50 rounded-2xl p-5 border border-rose-100 space-y-3">
+                        <label className="text-xs font-bold text-rose-600 uppercase tracking-wider flex items-center gap-2">
+                          <Users className="w-3.5 h-3.5" />
+                          Jouw Naam
+                        </label>
+                        <input 
+                          type="text"
+                          placeholder="Vul je volledige naam in..."
+                          className="w-full px-4 py-3 bg-white border border-rose-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"
+                          value={userName}
+                          onChange={(e) => setUserName(e.target.value)}
+                        />
+                        <p className="text-[10px] text-rose-400 leading-tight">
+                          * Je naam wordt opgeslagen in de database zodat de beheerder weet wie deze scholingen heeft gekozen.
+                        </p>
+                      </div>
+                    )}
+
+                    {cart.length === 0 ? (
+                      <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-50">
+                        <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center">
+                          <ShoppingBasket className="w-10 h-10 text-slate-300" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-slate-900">Je mandje is nog leeg</p>
+                          <p className="text-sm text-slate-500">Kies een scholing om deze hier te verzamelen.</p>
+                        </div>
+                      </div>
+                    ) : (
+                      cart.map(item => (
+                        <div 
+                          key={item.id}
+                          className="group bg-slate-50 rounded-2xl p-4 border border-slate-100 flex gap-4 items-start"
+                        >
+                          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-400 font-bold text-sm border border-slate-200 shrink-0">
+                            {item.id}
+                          </div>
+                          <div className="flex-grow">
+                            <h4 className="text-sm font-bold text-slate-900 line-clamp-1 mb-1">{item.title}</h4>
+                            <div className="flex items-center gap-3 text-[10px] text-slate-400 font-medium">
+                              <span className="flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                {item.duration?.split('(')[0]}
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <MapPin className="w-3 h-3" />
+                                {item.location}
+                              </span>
+                            </div>
+                          </div>
+                          <button 
+                            onClick={() => toggleCartItem(item)}
+                            className="p-2 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </>
                 )}
               </div>
 
-              {cart.length > 0 && (
+              {cart.length > 0 && !isSubmitted && (
                 <div className="p-6 border-t border-slate-100 bg-slate-50/50 space-y-4">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-slate-500 font-medium">Totaal aantal uren</span>
@@ -669,24 +754,23 @@ export default function App() {
                             userEmail: user?.email || 'niet ingelogd'
                           });
                         }
+                        
+                        const email = 'N.uitermark@kentalis.nl';
+                        const subject = encodeURIComponent(`Keuzelijst Scholingen 2026-2027 - ${userName.trim()}`);
+                        const totalHours = cart.reduce((acc, item) => acc + (item.totalHours || 0), 0);
+                        
+                        const courseList = cart.map(item => `- [#${item.id}] ${item.title} (${item.duration || 'n.v.t.'})`).join('%0D%0A');
+                        const body = encodeURIComponent(`Beste leidinggevende,%0D%0A%0D%0AHierbij de selectie van scholingen uit de Snoepwinkel van ${userName.trim()} voor het schooljaar 2026-2027:%0D%0A%0D%0A${courseList}%0D%0A%0D%0ATotaal indicatie uren: ${totalHours} uur.%0D%0A%0D%0AMet vriendelijke groet,%0D%0A${userName.trim()}`)
+                          .replace(/%250D%250A/g, '%0D%0A');
+                        
+                        window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+                        setIsSubmitted(true);
                       } catch (error) {
                         console.error("Error saving enrollment:", error);
+                        alert("Er ging iets mis bij het opslaan. Probeer het later opnieuw.");
                       } finally {
                         setIsSubmitting(false);
                       }
-
-                      const email = 'N.uitermark@kentalis.nl';
-                      const subject = encodeURIComponent(`Keuzelijst Scholingen 2026-2027 - ${userName.trim()}`);
-                      const totalHours = cart.reduce((acc, item) => {
-                        const hours = item.duration?.match(/\d+/);
-                        return acc + (hours ? parseInt(hours[0]) : 0);
-                      }, 0);
-                      
-                      const courseList = cart.map(item => `- [#${item.id}] ${item.title} (${item.duration || 'n.v.t.'})`).join('%0D%0A');
-                      const body = encodeURIComponent(`Beste leidinggevende,%0D%0A%0D%0AHierbij de selectie van scholingen uit de Snoepwinkel van ${userName.trim()} voor het schooljaar 2026-2027:%0D%0A%0D%0A${courseList}%0D%0A%0D%0ATotaal indicatie uren: ${totalHours} uur.%0D%0A%0D%0AMet vriendelijke groet,%0D%0A${userName.trim()}`)
-                        .replace(/%250D%250A/g, '%0D%0A'); // Fix double encoding if any
-                      
-                      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
                     }}
                   >
                     {isSubmitting ? 'Bezig met opslaan...' : 'Keuzelijst mailen naar leidinggevende'}
