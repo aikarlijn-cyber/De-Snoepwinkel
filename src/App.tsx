@@ -644,10 +644,7 @@ export default function App() {
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-slate-500 font-medium">Totaal aantal uren</span>
                     <span className="text-slate-900 font-bold">
-                      {cart.reduce((acc, item) => {
-                        const hours = item.duration?.match(/\d+/);
-                        return acc + (hours ? parseInt(hours[0]) : 0);
-                      }, 0)} uur (indicatie)
+                      {cart.reduce((acc, item) => acc + (item.totalHours || 0), 0)} uur (indicatie)
                     </span>
                   </div>
                   <button 

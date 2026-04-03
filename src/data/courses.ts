@@ -10,6 +10,7 @@ export interface Course {
   costs?: string;
   details?: string[];
   learningGoals?: string[];
+  totalHours?: number;
 }
 
 export const courses: Course[] = [
@@ -56,6 +57,7 @@ export const courses: Course[] = [
     maxParticipants: "Maximaal 8 deelnemers per groep",
     duration: "5 bijeenkomsten van elk 3,5 uur en 8 uur zelfstudie (25,5 uur)",
     location: "Op locatie",
+    totalHours: 25.5,
     learningGoals: [
       "De effectiviteit van je gedrag inschatten",
       "Je (interpersoonlijke) effectiviteit vergroten",
@@ -75,7 +77,8 @@ export const courses: Course[] = [
     targetAudience: "Voor alle medewerkers",
     maxParticipants: "Maximaal 16 personen",
     duration: "24 uur (3 dagen)",
-    location: "Op locatie bij AD Arnhem"
+    location: "Op locatie bij AD Arnhem",
+    totalHours: 24
   },
   {
     id: 5,
@@ -86,6 +89,7 @@ export const courses: Course[] = [
     maxParticipants: "Maximaal 15 personen",
     duration: "1 bijeenkomst van 8 uur",
     location: "Op locatie",
+    totalHours: 8,
     learningGoals: [
       "Het ontstaan van de LSP Methode",
       "Het proces van de LSP Methode",
@@ -103,7 +107,8 @@ export const courses: Course[] = [
     targetAudience: "Voor alle medewerkers",
     maxParticipants: "Minimaal 10, maximaal 20 personen",
     duration: "1 bijeenkomst van 2,5 uur",
-    location: "Op locatie - kringopstelling gewenst"
+    location: "Op locatie - kringopstelling gewenst",
+    totalHours: 2.5
   },
   {
     id: 7,
@@ -114,6 +119,7 @@ export const courses: Course[] = [
     maxParticipants: "Aantal deelnemers onbekend",
     duration: "2 x 3 uur",
     location: "Online",
+    totalHours: 6,
     details: [
       "Basisprincipes van helder schrijven",
       "Oefenen met e-mails, korte berichten en ondersteuningsplannen",
@@ -130,6 +136,7 @@ export const courses: Course[] = [
     maxParticipants: "Maximaal 30 medewerkers",
     duration: "1 bijeenkomst van 3 uur",
     location: "Op locatie",
+    totalHours: 3,
     learningGoals: [
       "Lesfasen en technieken van het EDI-lesmodel",
       "Theoretische onderbouwing en wetenschappelijke studies",
@@ -156,6 +163,7 @@ export const courses: Course[] = [
     maxParticipants: "Max. 16 deelnemers",
     duration: "3 bijeenkomsten van 2,5 uur",
     location: "Online",
+    totalHours: 7.5,
     details: [
       "3 online live bijeenkomsten (via Zoom)",
       "Tijdelijke WhatsAppgroep",
@@ -180,7 +188,8 @@ export const courses: Course[] = [
     targetAudience: "Alle medewerkers: AB 'ers",
     maxParticipants: "Maximaal 10 deelnemers",
     duration: "2 dagdelen van 3 uur",
-    location: "Op locatie"
+    location: "Op locatie",
+    totalHours: 6
   },
   {
     id: 13,
@@ -191,6 +200,7 @@ export const courses: Course[] = [
     maxParticipants: "Max. 25 deelnemers",
     duration: "2 bijeenkomsten van 3 uur",
     location: "Op locatie",
+    totalHours: 6,
     learningGoals: [
       "Verloop van spelontwikkeling en taal/denkontwikkeling",
       "Duiden van en aansluiten bij de taal van het spelende kind",
@@ -207,6 +217,7 @@ export const courses: Course[] = [
     maxParticipants: "Max 8 personen",
     duration: "4 uur (1 dagdeel)",
     location: "Op locatie",
+    totalHours: 4,
     details: [
       "Introductie effectief plannen",
       "E-mail organisatie & beheer (Outlook)",
@@ -222,6 +233,7 @@ export const courses: Course[] = [
     maxParticipants: "Maximaal 20 personen",
     duration: "4 dagdelen van 3,5 uur",
     location: "Op locatie",
+    totalHours: 14,
     details: [
       "Achtergrondinformatie TOS en dyslexie",
       "Technisch lezen",
@@ -237,7 +249,8 @@ export const courses: Course[] = [
     targetAudience: "AB-ers die ICB hebben afgerond",
     maxParticipants: "3-5 per groep",
     duration: "2-3 uur",
-    location: "Online"
+    location: "Online",
+    totalHours: 2.5
   },
   {
     id: 17,
@@ -276,6 +289,7 @@ export const courses: Course[] = [
     maxParticipants: "Maximaal 3 deelnemers",
     duration: "20 uur; 5 bijeenkomsten van 3 uur + voorbereiding",
     costs: "1200 euro, de dienst neemt de helft voor haar rekening",
+    totalHours: 20,
     details: [
       "Talenten Motivatie Analyse",
       "Intakegesprek",
@@ -292,6 +306,7 @@ export const courses: Course[] = [
     targetAudience: "AB-ers (min. 2 jaar in dienst)",
     maxParticipants: "Maximaal 3 deelnemers",
     duration: "20 uur; 5 bijeenkomsten van 3 uur + voorbereiding",
+    totalHours: 20,
     details: [
       "De rol van IB/KC",
       "Domein leren en ontwikkelen",
@@ -307,7 +322,8 @@ export const courses: Course[] = [
     targetAudience: "Alle medewerkers",
     maxParticipants: "Maximaal 20 deelnemers",
     duration: "1 uur",
-    location: "Op locatie bij AD Nijmegen"
+    location: "Op locatie bij AD Nijmegen",
+    totalHours: 1
   },
   {
     id: 24,
@@ -316,7 +332,8 @@ export const courses: Course[] = [
     description: "Leer helder en respectvol communiceren, onderhandelingstechnieken en krijg inzicht in hoe fysieke fitheid en mentale weerbaarheid bijdragen aan de kwaliteit van een gesprek.",
     targetAudience: "Alle medewerkers",
     maxParticipants: "Maximaal 16 deelnemers",
-    duration: "3 uur"
+    duration: "3 uur",
+    totalHours: 3
   },
   {
     id: 25,
@@ -326,7 +343,8 @@ export const courses: Course[] = [
     targetAudience: "AB-ers",
     maxParticipants: "Maximaal 12 deelnemers",
     duration: "6 uur",
-    location: "Op locatie"
+    location: "Op locatie",
+    totalHours: 6
   },
   {
     id: 26,
@@ -346,7 +364,8 @@ export const courses: Course[] = [
     targetAudience: "AB-ers",
     maxParticipants: "Maximaal 12 deelnemers",
     duration: "Totaal 4 uur, 2 bijeenkomsten",
-    location: "Op de dienst"
+    location: "Op de dienst",
+    totalHours: 4
   },
   {
     id: 28,
@@ -376,7 +395,8 @@ export const courses: Course[] = [
     targetAudience: "Alle medewerkers",
     maxParticipants: "Maximaal 10-15 deelnemers",
     duration: "1 bijeenkomst van 1 uur",
-    location: "Op locatie"
+    location: "Op locatie",
+    totalHours: 1
   },
   {
     id: 31,
@@ -385,7 +405,8 @@ export const courses: Course[] = [
     description: "Maak taal zichtbaar en voelbaar door handlettering. Geef belangrijke woorden extra stevigheid en bouw samen met leerlingen aan betekenis door vorm en ritme.",
     targetAudience: "Alle medewerkers",
     maxParticipants: "Maximaal 20 deelnemers",
-    duration: "1 bijeenkomst van 1 uur"
+    duration: "1 bijeenkomst van 1 uur",
+    totalHours: 1
   },
   {
     id: 32,
@@ -396,6 +417,7 @@ export const courses: Course[] = [
     maxParticipants: "Maximaal 10 deelnemers",
     duration: "2,5 uur",
     location: "Op locatie",
+    totalHours: 2.5,
     details: [
       "Uitleg taalaspecten",
       "Bekijken Schlichting, CELF-V-NL, Peabody",
@@ -411,6 +433,7 @@ export const courses: Course[] = [
     targetAudience: "AB-ers en logopedisten",
     maxParticipants: "Maximaal 10 deelnemers",
     duration: "3,5 uur op locatie (2 bijeenkomsten)",
+    totalHours: 3.5,
     learningGoals: [
       "Informatie halen uit logopedisch verslag",
       "Gebruik van TOS-web voor analyse",
@@ -425,7 +448,8 @@ export const courses: Course[] = [
     description: "Hoe kan DGM ingezet worden vanuit de systemische benadering? (Inhoud wordt nog nader beschreven).",
     targetAudience: "Alle medewerkers die DGM al hebben gevolgd",
     maxParticipants: "Maximaal 24 deelnemers",
-    duration: "1 x 2,5 uur"
+    duration: "1 x 2,5 uur",
+    totalHours: 2.5
   },
   {
     id: 35,
@@ -435,7 +459,8 @@ export const courses: Course[] = [
     targetAudience: "Voor LO-ers en nieuwe AB-ers",
     maxParticipants: "Maximaal 12 deelnemers",
     duration: "3 uur (2 bijeenkomsten van 1,5 uur)",
-    location: "Op locatie"
+    location: "Op locatie",
+    totalHours: 3
   },
   {
     id: 36,
@@ -445,7 +470,8 @@ export const courses: Course[] = [
     targetAudience: "Alle medewerkers",
     maxParticipants: "Maximaal 20",
     duration: "2,5 uur (incl. 1 uur voorbereiding)",
-    location: "Op locatie"
+    location: "Op locatie",
+    totalHours: 2.5
   },
   {
     id: 37,
@@ -484,7 +510,8 @@ export const courses: Course[] = [
     description: "Hoe ondersteun je leerlingen met TOS effectief bij woordenschatverwerving? Focus op woordbewustzijn, rijke contexten en herhaling.",
     targetAudience: "Alle medewerkers",
     maxParticipants: "Maximaal 24 deelnemers",
-    duration: "1 x 2 uur"
+    duration: "1 x 2 uur",
+    totalHours: 2
   },
   {
     id: 41,
@@ -519,7 +546,8 @@ export const courses: Course[] = [
     targetAudience: "Voor alle medewerkers",
     duration: "1 dagdeel",
     location: "Oss of Nijmegen",
-    costs: "Geen kosten"
+    costs: "Geen kosten",
+    totalHours: 4
   },
   {
     id: 45,
@@ -528,7 +556,8 @@ export const courses: Course[] = [
     description: "Bezoek een collega, wees aanwezig bij gesprekken en voer samen een reflectiegesprek. Word gematcht met een gemotiveerde collega.",
     targetAudience: "Alle medewerkers",
     duration: "8 uur (2 dagdelen)",
-    location: "Op locatie"
+    location: "Op locatie",
+    totalHours: 8
   },
   {
     id: 46,
@@ -538,7 +567,8 @@ export const courses: Course[] = [
     targetAudience: "Alle medewerkers",
     maxParticipants: "Groepjes van maximaal 4 personen",
     duration: "2 momenten van 1,5 uur",
-    location: "Online"
+    location: "Online",
+    totalHours: 3
   },
   {
     id: 47,
@@ -548,7 +578,8 @@ export const courses: Course[] = [
     targetAudience: "Alle medewerkers",
     maxParticipants: "Groepjes van maximaal 4 personen",
     duration: "3 uur (2 uur online + 1 uur voorbereiding)",
-    location: "Online"
+    location: "Online",
+    totalHours: 3
   },
   {
     id: 48,
@@ -584,7 +615,8 @@ export const courses: Course[] = [
     targetAudience: "Voor alle medewerkers",
     duration: "8 uur of 16 uur",
     location: "Apeldoorn",
-    costs: "280 euro of 400 euro"
+    costs: "280 euro of 400 euro",
+    totalHours: 8
   },
   {
     id: 52,
@@ -604,7 +636,8 @@ export const courses: Course[] = [
     targetAudience: "Voor alle medewerkers",
     duration: "8 uur",
     location: "Niet bekend",
-    costs: "Ong. 260 euro"
+    costs: "Ong. 260 euro",
+    totalHours: 8
   },
   {
     id: 54,
@@ -613,7 +646,8 @@ export const courses: Course[] = [
     description: "Kennisdag over Taalontwikkelingsstoornissen (TOS), verzorgd door Kentalis.",
     targetAudience: "Voor alle medewerkers",
     duration: "8 uur",
-    location: "Niet bekend"
+    location: "Niet bekend",
+    totalHours: 8
   },
   {
     id: 55,
@@ -623,7 +657,8 @@ export const courses: Course[] = [
     targetAudience: "Voor alle medewerkers",
     duration: "8 uur",
     location: "Niet bekend",
-    costs: "Ong. 150 euro"
+    costs: "Ong. 150 euro",
+    totalHours: 8
   },
   {
     id: 56,
@@ -633,6 +668,7 @@ export const courses: Course[] = [
     targetAudience: "Voor alle medewerkers",
     duration: "8 uur",
     location: "Nieuwegein",
-    costs: "280 euro"
+    costs: "280 euro",
+    totalHours: 8
   }
 ];
