@@ -44,7 +44,9 @@ import {
   query, 
   serverTimestamp,
   getDocFromServer,
-  doc
+  doc,
+  getDocs,
+  deleteDoc
 } from 'firebase/firestore';
 
 const CATEGORY_COLORS = {
@@ -74,6 +76,8 @@ export default function App() {
   const [isAuthReady, setIsAuthReady] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   // Test connection to Firestore
   useEffect(() => {
@@ -201,6 +205,22 @@ export default function App() {
     } catch (error) {
       console.error("PDF generation failed:", error);
       alert("Er ging iets mis bij het maken van de PDF. Probeer het opnieuw.");
+    }
+  };
+
+  const handleClearDatabase = async () => {
+    if (!isAdmin) return;
+    setIsClearing(true);
+    try {
+      const snapshot = await getDocs(collection(db, 'enrollments'));
+      const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
+      await Promise.all(deletePromises);
+      setShowClearConfirm(false);
+    } catch (error) {
+      console.error("Error clearing database:", error);
+      alert("Er ging iets mis bij het leegmaken van de database.");
+    } finally {
+      setIsClearing(false);
     }
   };
 
@@ -882,9 +902,42 @@ export default function App() {
                 </div>
 
                 <div className="p-8 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                  <p className="text-xs text-slate-400 italic">
-                    * Dit overzicht toont live data uit de database.
-                  </p>
+                  <div className="flex items-center gap-4">
+                    <p className="text-xs text-slate-400 italic">
+                      * Dit overzicht toont live data uit de database.
+                    </p>
+                    {isAdmin && (
+                      <div className="flex items-center gap-2">
+                        {showClearConfirm ? (
+                          <div className="flex items-center gap-2 bg-rose-50 p-2 rounded-xl border border-rose-100">
+                            <span className="text-[10px] font-bold text-rose-600 uppercase px-2">Zeker weten?</span>
+                            <button 
+                              disabled={isClearing}
+                              onClick={handleClearDatabase}
+                              className="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[10px] font-bold hover:bg-rose-700 transition-colors disabled:opacity-50"
+                            >
+                              {isClearing ? 'Bezig...' : 'Ja, wis alles'}
+                            </button>
+                            <button 
+                              disabled={isClearing}
+                              onClick={() => setShowClearConfirm(false)}
+                              className="px-3 py-1.5 bg-white text-slate-400 border border-slate-200 rounded-lg text-[10px] font-bold hover:bg-slate-50 transition-colors"
+                            >
+                              Annuleer
+                            </button>
+                          </div>
+                        ) : (
+                          <button 
+                            onClick={() => setShowClearConfirm(true)}
+                            className="px-4 py-2 text-rose-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl text-xs font-bold transition-all flex items-center gap-2"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            Database leegmaken
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
                   <button 
                     className="px-6 py-3 bg-slate-900 text-white rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
                     onClick={handleExport}
