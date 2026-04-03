@@ -134,11 +134,18 @@ export default function App() {
         if (result.user.email && admins.includes(result.user.email)) {
           setIsAdminOpen(true);
         } else {
-          alert('Toegang geweigerd: Alleen de beheerder kan dit overzicht bekijken.');
+          alert(`Toegang geweigerd: ${result.user.email} is geen beheerder.`);
           await signOut(auth);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Login failed:", error);
+        if (error.code === 'auth/popup-blocked') {
+          alert('De inlog pop-up is geblokkeerd door je browser. Sta pop-ups toe voor deze website.');
+        } else if (error.code === 'auth/unauthorized-domain') {
+          alert('Dit domein (Netlify) is nog niet geautoriseerd in Firebase. Voeg snoepwinkeltieloss.netlify.app toe aan de "Authorized Domains" in de Firebase Console.');
+        } else {
+          alert('Inloggen mislukt: ' + error.message);
+        }
       }
     }
   };
