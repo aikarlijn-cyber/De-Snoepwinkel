@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Candy, 
@@ -35,7 +35,9 @@ import {
   GoogleAuthProvider, 
   onAuthStateChanged, 
   User,
-  signOut
+  signOut,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import { 
   collection, 
@@ -78,6 +80,10 @@ export default function App() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [showEmailLogin, setShowEmailLogin] = useState(false);
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
 
   // Test connection to Firestore
   useEffect(() => {
@@ -137,25 +143,69 @@ export default function App() {
     if (isAdmin) {
       setIsAdminOpen(true);
     } else {
-      const provider = new GoogleAuthProvider();
-      try {
-        const result = await signInWithPopup(auth, provider);
-        if (result.user.email && admins.includes(result.user.email)) {
-          setIsAdminOpen(true);
-        } else {
-          alert(`Toegang geweigerd: ${result.user.email} is geen beheerder.`);
-          await signOut(auth);
-        }
-      } catch (error: any) {
-        console.error("Login failed:", error);
-        if (error.code === 'auth/popup-blocked') {
-          alert('De inlog pop-up is geblokkeerd door je browser. Sta pop-ups toe voor deze website.');
-        } else if (error.code === 'auth/unauthorized-domain') {
-          alert('Dit domein (Netlify) is nog niet geautoriseerd in Firebase. Voeg snoepwinkeltieloss.netlify.app toe aan de "Authorized Domains" in de Firebase Console.');
-        } else {
-          alert('Inloggen mislukt: ' + error.message);
-        }
+      setShowEmailLogin(true);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      if (result.user.email && admins.includes(result.user.email)) {
+        setIsAdminOpen(true);
+        setShowEmailLogin(false);
+      } else {
+        alert(`Toegang geweigerd: ${result.user.email} is geen beheerder.`);
+        await signOut(auth);
       }
+    } catch (error: any) {
+      console.error("Login failed:", error);
+      if (error.code === 'auth/popup-blocked') {
+        alert('De inlog pop-up is geblokkeerd door je browser. Sta pop-ups toe voor deze website.');
+      } else if (error.code === 'auth/unauthorized-domain') {
+        alert('Dit domein (Netlify) is nog niet geautoriseerd in Firebase. Voeg snoepwinkeltieloss.netlify.app toe aan de "Authorized Domains" in de Firebase Console.');
+      } else {
+        alert('Inloggen mislukt: ' + error.message);
+      }
+    }
+  };
+
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    setIsSubmitting(true);
+    try {
+      const result = await signInWithEmailAndPassword(auth, adminEmail, adminPassword);
+      if (result.user.email && admins.includes(result.user.email)) {
+        setIsAdminOpen(true);
+        setShowEmailLogin(false);
+        setAdminPassword('');
+      } else {
+        setLoginError(`Toegang geweigerd: ${result.user.email} is geen beheerder.`);
+        await signOut(auth);
+      }
+    } catch (error: any) {
+      console.error("Email login failed:", error);
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        setLoginError('Onjuist e-mailadres of wachtwoord.');
+      } else {
+        setLoginError('Inloggen mislukt: ' + error.message);
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!adminEmail) {
+      setLoginError('Vul eerst je e-mailadres in.');
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, adminEmail);
+      alert('Er is een e-mail gestuurd om je wachtwoord te resetten.');
+    } catch (error: any) {
+      setLoginError('Fout bij versturen reset e-mail: ' + error.message);
     }
   };
 
@@ -812,6 +862,109 @@ export default function App() {
                   )}
                 </div>
               )}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Admin Login Modal */}
+      <AnimatePresence>
+        {showEmailLogin && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowEmailLogin(false)}
+              className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4"
+            >
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden p-8 space-y-6"
+              >
+                <div className="text-center space-y-2">
+                  <div className="w-16 h-16 bg-rose-500 rounded-2xl flex items-center justify-center text-white mx-auto shadow-lg shadow-rose-200 mb-4">
+                    <Lock className="w-8 h-8" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-slate-900">Beheerder Inloggen</h2>
+                  <p className="text-sm text-slate-500">Log in met je e-mailadres en wachtwoord</p>
+                </div>
+
+                <form onSubmit={handleEmailLogin} className="space-y-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">E-mailadres</label>
+                    <input 
+                      type="email"
+                      required
+                      placeholder="naam@kentalis.nl"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"
+                      value={adminEmail}
+                      onChange={(e) => setAdminEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Wachtwoord</label>
+                    <input 
+                      type="password"
+                      required
+                      placeholder="••••••••"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"
+                      value={adminPassword}
+                      onChange={(e) => setAdminPassword(e.target.value)}
+                    />
+                  </div>
+
+                  {loginError && (
+                    <p className="text-xs text-rose-500 font-bold text-center bg-rose-50 py-2 rounded-lg border border-rose-100">
+                      {loginError}
+                    </p>
+                  )}
+
+                  <button 
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full py-4 bg-rose-500 text-white rounded-2xl font-bold shadow-lg shadow-rose-200 hover:bg-rose-600 transition-all disabled:opacity-50"
+                  >
+                    {isSubmitting ? 'Bezig met inloggen...' : 'Inloggen'}
+                  </button>
+                </form>
+
+                <div className="pt-2 flex flex-col gap-3">
+                  <button 
+                    onClick={handleForgotPassword}
+                    className="text-xs text-slate-400 font-medium hover:text-rose-500 transition-colors"
+                  >
+                    Wachtwoord vergeten?
+                  </button>
+                  
+                  <div className="relative py-2">
+                    <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-100"></div></div>
+                    <div className="relative flex justify-center text-[10px] uppercase font-bold text-slate-300 bg-white px-2">Of</div>
+                  </div>
+
+                  <button 
+                    onClick={handleGoogleLogin}
+                    className="w-full py-3 bg-white border border-slate-200 text-slate-600 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-slate-50 transition-all"
+                  >
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-4 h-4" alt="Google" />
+                    Inloggen met Google
+                  </button>
+
+                  <button 
+                    onClick={() => setShowEmailLogin(false)}
+                    className="w-full py-2 text-slate-400 font-bold text-xs hover:text-slate-600 transition-colors"
+                  >
+                    Annuleren
+                  </button>
+                </div>
+
+                <p className="text-[10px] text-slate-400 text-center leading-relaxed">
+                  * Heb je nog geen wachtwoord? Gebruik "Wachtwoord vergeten" om er een in te stellen voor je Kentalis e-mailadres.
+                </p>
+              </motion.div>
             </motion.div>
           </>
         )}
