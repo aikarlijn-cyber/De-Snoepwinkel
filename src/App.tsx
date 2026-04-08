@@ -37,7 +37,8 @@ import {
   User,
   signOut,
   signInWithEmailAndPassword,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  createUserWithEmailAndPassword
 } from 'firebase/auth';
 import { 
   collection, 
@@ -84,6 +85,7 @@ export default function App() {
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   const [loginError, setLoginError] = useState('');
+  const [isRegistering, setIsRegistering] = useState(false);
 
   // Test connection to Firestore
   useEffect(() => {
@@ -175,19 +177,36 @@ export default function App() {
     setLoginError('');
     setIsSubmitting(true);
     try {
-      const result = await signInWithEmailAndPassword(auth, adminEmail, adminPassword);
-      if (result.user.email && admins.includes(result.user.email)) {
+      if (isRegistering) {
+        if (!admins.includes(adminEmail)) {
+          setLoginError('Alleen geautoriseerde beheerders kunnen een account aanmaken.');
+          setIsSubmitting(false);
+          return;
+        }
+        const result = await createUserWithEmailAndPassword(auth, adminEmail, adminPassword);
         setIsAdminOpen(true);
         setShowEmailLogin(false);
         setAdminPassword('');
+        setIsRegistering(false);
       } else {
-        setLoginError(`Toegang geweigerd: ${result.user.email} is geen beheerder.`);
-        await signOut(auth);
+        const result = await signInWithEmailAndPassword(auth, adminEmail, adminPassword);
+        if (result.user.email && admins.includes(result.user.email)) {
+          setIsAdminOpen(true);
+          setShowEmailLogin(false);
+          setAdminPassword('');
+        } else {
+          setLoginError(`Toegang geweigerd: ${result.user.email} is geen beheerder.`);
+          await signOut(auth);
+        }
       }
     } catch (error: any) {
-      console.error("Email login failed:", error);
+      console.error("Auth failed:", error);
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
         setLoginError('Onjuist e-mailadres of wachtwoord.');
+      } else if (error.code === 'auth/email-already-in-use') {
+        setLoginError('Dit e-mailadres is al geregistreerd. Log in of gebruik wachtwoord vergeten.');
+      } else if (error.code === 'auth/weak-password') {
+        setLoginError('Het wachtwoord moet minimaal 6 tekens bevatten.');
       } else {
         setLoginError('Inloggen mislukt: ' + error.message);
       }
@@ -889,8 +908,14 @@ export default function App() {
                   <div className="w-16 h-16 bg-rose-500 rounded-2xl flex items-center justify-center text-white mx-auto shadow-lg shadow-rose-200 mb-4">
                     <Lock className="w-8 h-8" />
                   </div>
-                  <h2 className="text-2xl font-bold text-slate-900">Beheerder Inloggen</h2>
-                  <p className="text-sm text-slate-500">Log in met je e-mailadres en wachtwoord</p>
+                  <h2 className="text-2xl font-bold text-slate-900">
+                    {isRegistering ? 'Account Aanmaken' : 'Beheerder Inloggen'}
+                  </h2>
+                  <p className="text-sm text-slate-500">
+                    {isRegistering 
+                      ? 'Stel een wachtwoord in voor je beheerder-account' 
+                      : 'Log in met je e-mailadres en wachtwoord'}
+                  </p>
                 </div>
 
                 <form onSubmit={handleEmailLogin} className="space-y-4">
@@ -928,17 +953,33 @@ export default function App() {
                     disabled={isSubmitting}
                     className="w-full py-4 bg-rose-500 text-white rounded-2xl font-bold shadow-lg shadow-rose-200 hover:bg-rose-600 transition-all disabled:opacity-50"
                   >
-                    {isSubmitting ? 'Bezig met inloggen...' : 'Inloggen'}
+                    {isSubmitting 
+                      ? (isRegistering ? 'Bezig met registreren...' : 'Bezig met inloggen...') 
+                      : (isRegistering ? 'Account Aanmaken' : 'Inloggen')}
                   </button>
                 </form>
 
                 <div className="pt-2 flex flex-col gap-3">
                   <button 
-                    onClick={handleForgotPassword}
-                    className="text-xs text-slate-400 font-medium hover:text-rose-500 transition-colors"
+                    onClick={() => {
+                      setIsRegistering(!isRegistering);
+                      setLoginError('');
+                    }}
+                    className="w-full py-3 px-4 bg-rose-50 border border-rose-100 text-rose-600 rounded-xl font-bold text-xs hover:bg-rose-100 transition-all flex items-center justify-center gap-2"
                   >
-                    Wachtwoord vergeten?
+                    {isRegistering 
+                      ? 'Heb je al een account? Log hier in' 
+                      : 'Nog geen account? Maak er hier een aan'}
                   </button>
+                  
+                  {!isRegistering && (
+                    <button 
+                      onClick={handleForgotPassword}
+                      className="text-xs text-slate-400 font-medium hover:text-rose-500 transition-colors text-center"
+                    >
+                      Wachtwoord vergeten?
+                    </button>
+                  )}
                   
                   <div className="relative py-2">
                     <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-100"></div></div>
@@ -959,6 +1000,21 @@ export default function App() {
                   >
                     Annuleren
                   </button>
+
+                  {user && !isAdmin && (
+                    <div className="pt-4 border-t border-slate-100 text-center">
+                      <p className="text-[10px] text-slate-400 mb-2">Ingelogd als: {user.email}</p>
+                      <button 
+                        onClick={() => {
+                          handleLogout();
+                          setShowEmailLogin(false);
+                        }}
+                        className="text-[10px] text-rose-500 font-bold uppercase tracking-widest hover:underline"
+                      >
+                        Uitloggen en opnieuw proberen
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <p className="text-[10px] text-slate-400 text-center leading-relaxed">
