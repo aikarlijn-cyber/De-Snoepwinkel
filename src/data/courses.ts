@@ -817,28 +817,48 @@ export const courses: Course[] = [
   },
   {
     id: 50,
-    title: "TOS en cormobiditeit: ADHD",category: 'Collega',
-    description: "Op verzoek van jullie naar aanleiding van de opbrengsten van het Expertise Café in oktober!\n\nTOS komt regelmatig voor in combinatie met andere diagnoses (comorbiditeit). In deze bijeenkomst verkennen we TOS en ADHD.\n\nWe bespreken de diagnose ADHD vanuit de DSM-5 en kijken vervolgens naar de cormobiditeit TOS en ADHD vanuit het perspectief van de Commissie van Onderzoek (CvO) en Siméa. Aan de hand van eigen praktijkvoorbeelden onderzoeken we waar TOS ophoudt en andere problematiek begint.\nNa afloop heb je meer zicht op de grenzen van een ondersteuningsarrangementen vanuit de TOS en wanneer scholen aan zet zijn. De bijeenkomst wordt extra waardevol als je vanuit je eigen caseload vragen meeneemt.",
+    title: "TOS en cormobiditeit: ADHD",totalHours: 3,
+    totalCosts: 0,
+    trainer: "MARIEKE C."
+  },
+  {
+    id: 49,
+    title: "TOS en comorbiditeit: autisme",
+    category: 'Collega',
+    description: "Op verzoek van jullie naar aanleiding van de opbrengsten van het Expertise Café in oktober!\n\nTOS komt regelmatig voor in combinatie met andere diagnoses (comorbiditeit). In deze bijeenkomst verkennen we TOS en Autisme.\n\nWe bespreken de diagnose Autisme (ASS) vanuit de DSM-5 en kijken vervolgens naar de comorbiditeit TOS en ASS vanuit het perspectief van de Commissie van Onderzoek (CvO) en Siméa. Aan de hand van eigen praktijkvoorbeelden onderzoeken we waar TOS ophoudt en andere problematiek begint.\nNa afloop heb je meer zicht op de grenzen van een ondersteuningsarrangementen vanuit de TOS en wanneer scholen aan zet zijn. De bijeenkomst wordt extra waardevol als je vanuit je eigen caseload vragen meeneemt.",
     targetAudience: "Alle medewerkers",
     duration: "2 uur op locatie bij AD Nijmegen + 1 uur online borgingsbijeenkomst",
     location: "AD Nijmegen",
     costs: "Gedragen door de AD",
     totalHours: 3,
     totalCosts: 0,
-    trainer: "MARIEKE L."
+    trainer: "MARIEKE C."
+  },
+  {
+    id: 50,
+    title: "TOS en comorbiditeit: ADHD",
+    category: 'Collega',
+    description: "Op verzoek van jullie naar aanleiding van de opbrengsten van het Expertise Café in oktober!\n\nTOS komt regelmatig voor in combinatie met andere diagnoses (comorbiditeit). In deze bijeenkomst verkennen we TOS en ADHD.\n\nWe bespreken de diagnose ADHD vanuit de DSM-5 en kijken vervolgens naar de comorbiditeit TOS en ADHD vanuit het perspectief van de Commissie van Onderzoek (CvO) en Siméa. Aan de hand van eigen praktijkvoorbeelden onderzoeken we waar TOS ophoudt en andere problematiek begint.\nNa afloop heb je meer zicht op de grenzen van een ondersteuningsarrangementen vanuit de TOS en wanneer scholen aan zet zijn. De bijeenkomst wordt extra waardevol als je vanuit je eigen caseload vragen meeneemt.",
+    targetAudience: "Alle medewerkers",
+    duration: "2 uur op locatie bij AD Nijmegen + 1 uur online borgingsbijeenkomst",
+    location: "AD Nijmegen",
+    costs: "Gedragen door de AD",
+    totalHours: 3,
+    totalCosts: 0,
+    trainer: "MARIEKE C."
   },
   {
     id: 51,
-    title: "TOS en cormobiditeit: dyslexie",
+    title: "TOS en comorbiditeit: dyslexie",
     category: 'Collega',
-    description: "Op verzoek van jullie naar aanleiding van de opbrengsten van het Expertise Café in oktober!\n\nTOS komt regelmatig voor in combinatie met andere diagnoses (cormobiditeit). In deze bijeenkomst verkennen we TOS en dyslexie.\n\nWe bespreken de diagnose dyslexie vanuit de DSM-5 en kijken vervolgens naar de cormobiditeit TOS en dyslexie vanuit het perspectief van de Commissie van Onderzoek (CvO) en Siméa. Aan de hand van eigen praktijkvoorbeelden onderzoeken we waar TOS ophoudt en andere problematiek begint.\nNa afloop heb je meer zicht op de grenzen van een ondersteuningsarrangementen vanuit de TOS en wanneer scholen aan zet zijn. De bijeenkomst wordt extra waardevol als je vanuit je eigen caseload vragen meeneemt.",
+    description: "Op verzoek van jullie naar aanleiding van de opbrengsten van het Expertise Café in oktober!\n\nTOS komt regelmatig voor in combinatie met andere diagnoses (comorbiditeit). In deze bijeenkomst verkennen we TOS en dyslexie.\n\nWe bespreken de diagnose dyslexie vanuit de DSM-5 en kijken vervolgens naar de comorbiditeit TOS en dyslexie vanuit het perspectief van de Commissie van Onderzoek (CvO) en Siméa. Aan de hand van eigen praktijkvoorbeelden onderzoeken we waar TOS ophoudt en andere problematiek begint.\nNa afloop heb je meer zicht op de grenzen van een ondersteuningsarrangementen vanuit de TOS en wanneer scholen aan zet zijn. De bijeenkomst wordt extra waardevol als je vanuit je eigen caseload vragen meeneemt.",
     targetAudience: "Alle medewerkers",
     duration: "2 uur op locatie bij AD Nijmegen + 1 uur online borgingsbijeenkomst",
     location: "AD Nijmegen",
     costs: "Gedragen door de AD",
     totalHours: 3,
     totalCosts: 0,
-    trainer: "MARIEKE L."
+    trainer: "MARIEKE C."
   },
   {
     id: 52,
@@ -864,7 +884,7 @@ export const courses: Course[] = [
     costs: "0 euro",
     totalHours: 4,
     totalCosts: 0,
-    trainer: "MARIEKE L."
+    trainer: "MARIEKE C."
   },
   {
     id: 54,
@@ -877,7 +897,7 @@ export const courses: Course[] = [
     costs: "0 euro",
     totalHours: 4,
     totalCosts: 0,
-    trainer: "MARIEKE L."
+    trainer: "MARIEKE C."
   },
   {
     id: 55,
