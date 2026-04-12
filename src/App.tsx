@@ -23,7 +23,8 @@ import {
   Download,
   DownloadCloud,
   LogIn,
-  LogOut
+  LogOut,
+  User as UserIcon
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
@@ -428,11 +429,29 @@ export default function App() {
               {/* Welcome Section */}
               <section className="bg-gradient-to-br from-rose-50 to-amber-50 rounded-3xl p-6 sm:p-10 border border-white shadow-sm relative overflow-hidden">
                 <div className="relative z-10 max-w-2xl">
-                  <h2 className="text-3xl font-bold text-slate-900 mb-4">Welkom in de Snoepwinkel! 🍭</h2>
-                  <p className="text-slate-600 leading-relaxed mb-6">
-                    Kies uit ons uitgebreide aanbod van scholingen. Of je nu op zoek bent naar externe expertise, 
-                    kennis van collega's of inspirerende congressen, hier vind je de perfecte 'snoepjes' voor jouw professionele ontwikkeling.
-                  </p>
+                  <h2 className="text-3xl font-bold text-slate-900 mb-4">Welkom bij de Snoepwinkel Tiel-Oss</h2>
+                  <div className="text-slate-600 leading-relaxed mb-6 space-y-4">
+                    <p>
+                      Komend schooljaar gaan we bij genoeg interesse onderstaande scholing aanbieden. Per jaar kun je maximaal 123 uur en 550 euro naar rato in te zetten. Maak een overzicht voor jezelf, hoe zou je deze uren willen indelen? En welke scholing uit onderstaand aanbod zou daarbij passen? Denk ook aan literatuur die je wilt lezen, collegiale consultatie, werkbezoeken bij collega’s enz. 
+                    </p>
+                    <p>
+                      Op basis van je keuze gaan we de scholing inplannen, we gaan er dan dus vanuit dat je inschrijving definitief is. Het kan voorkomen dat we niet voldoende interesse hebben voor een training/workshop. In dat geval krijg je bericht. Ook kan het voorkomen dat de groep vol is. In dat geval gaan we loten. 
+                    </p>
+                    <div className="bg-white/50 p-4 rounded-xl border border-rose-100">
+                      <p className="font-semibold text-slate-800 mb-1">Berekenen professionaliseringsbudget: fte x 550 euro</p>
+                      <p className="font-semibold text-slate-800">Berekenen professionaliseringsuren: fte x 123 uur</p>
+                      <p className="text-xs mt-1 italic">(let op, de CAO heeft de duurzame inzetbaarheidsuren en professionaliseringsuren bij elkaar geschoven. Bedenk dus hoe je de uren wilt inzetten)</p>
+                    </div>
+                    <p>
+                      Het aanbod aan congressen is haast oneindig. Hieronder bieden we een aantal congressen aan die vaker door medewerkers van de AD bezocht worden. We willen hiermee niet volledig zijn. Heb je een ander congres dat je wil bezoeken, dat kan. Houd rekening met de kosten bij de planning van je professionaliseringsbudget en noteer het congres dat je wilt bezoeken in je professionaliseringsoverzicht.
+                    </p>
+                    <p className="text-emerald-600 font-medium italic">
+                      &gt; TIP! Je kunt hieronder alle scholingen bekijken, maar ook klikken op de verschillende categorieën of de zoekfunctie gebruiken. Wil je iets met gespreksvaardigheden? Dan kun je bijv. 'gesprek' typen.
+                    </p>
+                    <p className="font-bold text-rose-600">
+                      Veel plezier met het uitzoeken van je scholing!
+                    </p>
+                  </div>
                   <div className="flex flex-wrap gap-2">
                     {categories.map(cat => (
                       <button
@@ -450,142 +469,7 @@ export default function App() {
                   </div>
                 </div>
                 <Sparkles className="absolute right-10 top-10 w-32 h-32 text-rose-200/50 -rotate-12" />
-              </section>
-
-              {/* Course Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredCourses.map((course, index) => (
-                  <motion.button
-                    key={course.id}
-                    layoutId={`course-${course.id}`}
-                    onClick={() => setSelectedCourse(course)}
-                    className="group relative bg-white border border-slate-100 rounded-3xl p-6 text-left hover:shadow-xl hover:shadow-rose-500/5 transition-all duration-300 flex flex-col h-full"
-                    whileHover={{ y: -4 }}
-                  >
-                    <div className="flex items-start justify-between mb-4">
-                      <span className="flex items-center justify-center w-10 h-10 rounded-2xl bg-slate-50 text-slate-400 font-bold text-lg border border-slate-100 group-hover:bg-rose-50 group-hover:text-rose-500 group-hover:border-rose-100 transition-colors">
-                        {course.id}
-                      </span>
-                      <div className="flex gap-2">
-                        {isInCart(course.id) && (
-                          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 border border-emerald-200">
-                            <CheckCircle2 className="w-4 h-4" />
-                          </div>
-                        )}
-                        <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border flex items-center gap-1.5 ${CATEGORY_COLORS[course.category]}`}>
-                          {CATEGORY_ICONS[course.category]}
-                          {course.category}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-rose-600 transition-colors line-clamp-2">
-                      {course.title}
-                    </h3>
-                    
-                    <p className="text-sm text-slate-500 line-clamp-3 mb-6 flex-grow">
-                      {course.description}
-                    </p>
-
-                    <div className="flex items-center gap-4 text-xs text-slate-400 font-medium">
-                      {course.duration && (
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-3.5 h-3.5" />
-                          {course.duration.split('(')[0]}
-                        </div>
-                      )}
-                      {course.location && (
-                        <div className="flex items-center gap-1">
-                          <MapPin className="w-3.5 h-3.5" />
-                          {course.location}
-                        </div>
-                      )}
-                    </div>
-                  </motion.button>
-                ))}
-              </div>
-
-              {filteredCourses.length === 0 && (
-                <div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-                  <Search className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-slate-900">Geen scholingen gevonden</h3>
-                  <p className="text-slate-500">Probeer een andere zoekterm of categorie.</p>
-                </div>
-              )}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="detail"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="max-w-4xl mx-auto"
-            >
-              <button
-                onClick={() => setSelectedCourse(null)}
-                className="flex items-center gap-2 text-slate-500 hover:text-rose-500 font-medium mb-8 transition-colors group"
-              >
-                <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center group-hover:border-rose-200 group-hover:bg-rose-50 transition-all">
-                  <ChevronLeft className="w-5 h-5" />
-                </div>
-                Terug naar overzicht
-              </button>
-
-              <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-2xl shadow-rose-500/5 overflow-hidden">
-                {/* Detail Header */}
-                <div className={`p-8 sm:p-12 border-b ${CATEGORY_COLORS[selectedCourse.category].split(' ')[0]} bg-opacity-30`}>
-                  <div className="flex flex-wrap items-center gap-4 mb-6">
-                    <span className="px-4 py-1.5 rounded-full bg-white text-slate-900 font-bold text-sm border border-slate-200 shadow-sm">
-                      Scholing #{selectedCourse.id}
-                    </span>
-                    <div className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border bg-white flex items-center gap-2 ${CATEGORY_COLORS[selectedCourse.category].split(' ').slice(1).join(' ')}`}>
-                      {CATEGORY_ICONS[selectedCourse.category]}
-                      {selectedCourse.category}
-                    </div>
-                  </div>
-                  <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight mb-6">
-                    {selectedCourse.title}
-                  </h2>
-                  <p className="text-lg text-slate-700 leading-relaxed max-w-3xl">
-                    {selectedCourse.description}
-                  </p>
-                </div>
-
-                {/* Detail Content */}
-                <div className="p-8 sm:p-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
-                  <div className="lg:col-span-2 space-y-10">
-                    {selectedCourse.details && (
-                      <section>
-                        <h4 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                          <BookOpen className="w-5 h-5 text-rose-500" />
-                          Wat komt er aan bod?
-                        </h4>
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          {selectedCourse.details.map((detail, i) => (
-                            <li key={i} className="flex items-start gap-3 text-slate-600 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                              <div className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-2 shrink-0" />
-                              <span className="text-sm leading-snug">{detail}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </section>
-                    )}
-
-                    {selectedCourse.learningGoals && (
-                      <section>
-                        <h4 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                          <Sparkles className="w-5 h-5 text-amber-500" />
-                          Wat leer je?
-                        </h4>
-                        <div className="space-y-3">
-                          {selectedCourse.learningGoals.map((goal, i) => (
-                            <div key={i} className="flex items-center gap-4 bg-amber-50/50 p-4 rounded-2xl border border-amber-100/50">
-                              <div className="w-8 h-8 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600 font-bold text-xs shrink-0">
-                                {i + 1}
-                              </div>
-                              <span className="text-sm text-slate-700 font-medium">{goal}</span>
-                            </div>
-                          ))}
+              </section>))}
                         </div>
                       </section>
                     )}
@@ -645,6 +529,33 @@ export default function App() {
                             <div>
                               <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Deelnemers</p>
                               <p className="text-sm font-medium text-slate-700">{selectedCourse.maxParticipants}</p>
+                            </div>
+                          </div>
+                        )}
+
+                        {selectedCourse.trainer && (
+                          <div className="flex items-start gap-3">
+                            <UserIcon className="w-5 h-5 text-blue-400 shrink-0" />
+                            <div>
+                              <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Trainer / Organisatie</p>
+                              <p className="text-sm font-medium text-slate-700">{selectedCourse.trainer}</p>
+                            </div>
+                          </div>
+                        )}
+
+                        {selectedCourse.website && (
+                          <div className="flex items-start gap-3">
+                            <ExternalLink className="w-5 h-5 text-rose-400 shrink-0" />
+                            <div>
+                              <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Website</p>
+                              <a 
+                                href={selectedCourse.website} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-sm font-medium text-rose-500 hover:underline flex items-center gap-1"
+                              >
+                                Bezoek website
+                              </a>
                             </div>
                           </div>
                         )}
@@ -799,10 +710,14 @@ export default function App() {
                           </div>
                           <div className="flex-grow">
                             <h4 className="text-sm font-bold text-slate-900 line-clamp-1 mb-1">{item.title}</h4>
-                            <div className="flex items-center gap-3 text-[10px] text-slate-400 font-medium">
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-slate-400 font-medium">
                               <span className="flex items-center gap-1">
                                 <Clock className="w-3 h-3" />
-                                {item.duration?.split('(')[0]}
+                                {item.totalHours || 0} uur
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Euro className="w-3 h-3" />
+                                € {item.totalCosts || 0}
                               </span>
                               <span className="flex items-center gap-1">
                                 <MapPin className="w-3 h-3" />
@@ -825,11 +740,19 @@ export default function App() {
 
               {cart.length > 0 && !isSubmitted && (
                 <div className="p-6 border-t border-slate-100 bg-slate-50/50 space-y-4">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-500 font-medium">Totaal aantal uren</span>
-                    <span className="text-slate-900 font-bold">
-                      {cart.reduce((acc, item) => acc + (item.totalHours || 0), 0)} uur (indicatie)
-                    </span>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-500 font-medium">Totaal aantal uren</span>
+                      <span className="text-slate-900 font-bold">
+                        {cart.reduce((acc, item) => acc + (item.totalHours || 0), 0)} uur
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-500 font-medium">Totaal kosten</span>
+                      <span className="text-slate-900 font-bold">
+                        € {cart.reduce((acc, item) => acc + (item.totalCosts || 0), 0)}
+                      </span>
+                    </div>
                   </div>
                   <button 
                     disabled={!userName.trim() || isSubmitting}
@@ -857,9 +780,10 @@ export default function App() {
                         const email = 'N.uitermark@kentalis.nl';
                         const subject = encodeURIComponent(`Keuzelijst Scholingen 2026-2027 - ${userName.trim()}`);
                         const totalHours = cart.reduce((acc, item) => acc + (item.totalHours || 0), 0);
+                        const totalCosts = cart.reduce((acc, item) => acc + (item.totalCosts || 0), 0);
                         
-                        const courseList = cart.map(item => `- [#${item.id}] ${item.title} (${item.duration || 'n.v.t.'})`).join('%0D%0A');
-                        const body = encodeURIComponent(`Beste leidinggevende,%0D%0A%0D%0AHierbij de selectie van scholingen uit de Snoepwinkel van ${userName.trim()} voor het schooljaar 2026-2027:%0D%0A%0D%0A${courseList}%0D%0A%0D%0ATotaal indicatie uren: ${totalHours} uur.%0D%0A%0D%0AMet vriendelijke groet,%0D%0A${userName.trim()}`)
+                        const courseList = cart.map(item => `- [#${item.id}] ${item.title} (${item.totalHours || 0} uur, €${item.totalCosts || 0})`).join('%0D%0A');
+                        const body = encodeURIComponent(`Beste leidinggevende,%0D%0A%0D%0AHierbij de selectie van scholingen uit de Snoepwinkel van ${userName.trim()} voor het schooljaar 2026-2027:%0D%0A%0D%0A${courseList}%0D%0A%0D%0ATotaal indicatie uren: ${totalHours} uur.%0D%0ATotaal kosten: € ${totalCosts}.%0D%0A%0D%0AMet vriendelijke groet,%0D%0A${userName.trim()}`)
                           .replace(/%250D%250A/g, '%0D%0A');
                         
                         window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
@@ -884,9 +808,7 @@ export default function App() {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
-
-      {/* Admin Login Modal */}
+      </AnimatePresence>{/* Admin Login Modal */}
       <AnimatePresence>
         {showEmailLogin && (
           <>
@@ -1174,6 +1096,7 @@ export default function App() {
         <p className="text-sm text-slate-400">
           © 2026 Kentalis Ambulante Dienst. Alle rechten voorbehouden.
         </p>
+        <p className="text-[10px] text-slate-300 mt-2 uppercase tracking-widest">v1.0.1 - Update: 11 april 2026</p>
       </footer>
     </div>
   );
