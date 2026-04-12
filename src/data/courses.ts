@@ -21,7 +21,7 @@ export const courses: Course[] = [
     id: 1,
     title: "Training Goed in Gesprek deel 1 basis (Rol&Co)",
     category: 'Extern',
-    description: "In drie losse dagdelen ga je aan de slag met je persoonlijke ontwikkelpunt en vaardigheden die je goed kunt inzetten in je praktijk als AB-er. In een veilige en vertrouwde leersetting werk je aan technieken die nodig zijn for een goed en effectief gesprek. Hiermee word je sterker in je professionele rol en dat maakt je werk leuker. Alle theorie en tips zijn direct toepasbaar in jouw eigen praktijk.",
+    description: "In drie losse dagdelen ga je aan de slag met je persoonlijke ontwikkelpunt en vaardigheden die je goed kunt inzetten in je praktijk als AB-er. In een veilige en vertrouwde leersetting werk je aan technieken die nodig zijn for een goed and effectief gesprek. Hiermee word je sterker in je professionele rol en dat maakt je werk leuker. Alle theorie en tips zijn direct toepasbaar in jouw eigen praktijk.",
     targetAudience: "Voor AB-ers en logopedisten",
     maxParticipants: "Maximaal 8 deelnemers",
     duration: "12 uur (3 dagdelen van 4 uur) op locatie Oss of Tiel + 1 uur online borgingsbijeenkomst",
@@ -63,7 +63,7 @@ export const courses: Course[] = [
     id: 3,
     title: "Persoonlijk leiderschap",
     category: 'Extern',
-    description: "Hoe verhoud ik mij als Kentalis medewerker binnen inclusiever onderwijs tot alle betrokkenen, zoals de leerlingen, de collega’s, de ouders, de gastschool? Veranderingen in rol/taak en positie doen een beroep op een nieuwe manier van denken, een nieuwe manier van doen. In deze cursus staat deze omslag in doen en denken centraal, waarbij veel handvatten aangereikt worden om zelfbewuster en doeltreffender de nieuwe situatie in te kunnen gaan.",
+    description: "Hoe verhoud ik mij als Kentalis medewerker binnen inclusiever onderwijs tot alle betrokkenen, zoals de leerlingen, de collega’s, de ouders, de gastschool? Veranderingen in rol/taak en positie doen een beroep on een nieuwe manier van denken, een nieuwe manier van doen. In deze cursus staat deze omslag in doen en denken centraal, waarbij veel handvatten aangereikt worden om zelfbewuster en doeltreffender de nieuwe situatie in te kunnen gaan.",
     targetAudience: "Voor AB-ers en logopedisten",
     maxParticipants: "Maximaal 8 deelnemers per groep",
     duration: "25,5 uur (5 bijeenkomsten van elk 3,5 uur en 8 uur zelfstudie), op locatie Oss of Tiel + 1 uur online borgingsbijeenkomst",
@@ -530,7 +530,7 @@ export const courses: Course[] = [
     details: [
       "Korte uitleg van de verschillende taalaspecten",
       "Het met elkaar bekijken en uitleggen van diverse logopedische testen: o.a. de Schlichting Testen, de CELF-V-NL en de Peabody Picture Vocabulary Test.",
-      "Korte uitleg over scores: hoe zit het ook alweer met Q-scores, percentielscores, standaarddeviaties etc?",
+      "Korte uitleg over scores: hoe ziet het ook alweer met Q-scores, percentielscores, standaarddeviaties etc?",
       "Casuïstiek: aan de hand van aangereikte casussen de logopedische testgegevens bekijken. Zijn de resultaten afwijkend of niet? Wat zou de insteek van de begeleiding kunnen zijn?"
     ]
   },
@@ -698,7 +698,7 @@ export const courses: Course[] = [
     id: 41,
     title: "Woordenschat en TOS",
     category: 'Collega',
-    description: "Woordenschatonderwijs is cruciaal voor leerlingen met TOS. Hoe kun je op een effectieve manier werken aan woordenschatuitbreiding? We kijken naar de viertakt van Verhallen en hoe je deze kunt adviseren.",
+    description: "Woordenschatonderwijs is cruciaal voor leerlingen met TOS. Hoe kun je op een effectieve manier werken aan woordenschatuitbreiding? We kijken naar de viertakt van Verhallen en hoe je deze kunt toepassen.",
     targetAudience: "Alle medewerkers",
     maxParticipants: "Maximaal 24 deelnemers",
     duration: "2 uur op locatie bij AD Nijmegen + 1 uur online borgingsbijeenkomst",
@@ -804,7 +804,7 @@ export const courses: Course[] = [
   },
   {
     id: 49,
-    title: "TOS en cormobiditeit: autisme",
+    title: "TOS en comorbiditeit: autisme",
     category: 'Collega',
     description: "Op verzoek van jullie naar aanleiding van de opbrengsten van het Expertise Café in oktober!\n\nTOS komt regelmatig voor in combinatie met andere diagnoses (comorbiditeit). In deze bijeenkomst verkennen we TOS en Autisme.\n\nWe bespreken de diagnose Autisme (ASS) vanuit de DSM-5 en kijken vervolgens naar de comorbiditeit TOS en ASS vanuit het perspectief van de Commissie van Onderzoek (CvO) en Siméa. Aan de hand van eigen praktijkvoorbeelden onderzoeken we waar TOS ophoudt en andere problematiek begint.\nNa afloop heb je meer zicht op de grenzen van een ondersteuningsarrangementen vanuit de TOS en wanneer scholen aan zet zijn. De bijeenkomst wordt extra waardevol als je vanuit je eigen caseload vragen meeneemt.",
     targetAudience: "Alle medewerkers",
@@ -817,25 +817,6 @@ export const courses: Course[] = [
   },
   {
     id: 50,
-    title: "TOS en cormobiditeit: ADHD",totalHours: 3,
-    totalCosts: 0,
-    trainer: "MARIEKE C."
-  },
-  {
-    id: 49,
-    title: "TOS en comorbiditeit: autisme",
-    category: 'Collega',
-    description: "Op verzoek van jullie naar aanleiding van de opbrengsten van het Expertise Café in oktober!\n\nTOS komt regelmatig voor in combinatie met andere diagnoses (comorbiditeit). In deze bijeenkomst verkennen we TOS en Autisme.\n\nWe bespreken de diagnose Autisme (ASS) vanuit de DSM-5 en kijken vervolgens naar de comorbiditeit TOS en ASS vanuit het perspectief van de Commissie van Onderzoek (CvO) en Siméa. Aan de hand van eigen praktijkvoorbeelden onderzoeken we waar TOS ophoudt en andere problematiek begint.\nNa afloop heb je meer zicht op de grenzen van een ondersteuningsarrangementen vanuit de TOS en wanneer scholen aan zet zijn. De bijeenkomst wordt extra waardevol als je vanuit je eigen caseload vragen meeneemt.",
-    targetAudience: "Alle medewerkers",
-    duration: "2 uur op locatie bij AD Nijmegen + 1 uur online borgingsbijeenkomst",
-    location: "AD Nijmegen",
-    costs: "Gedragen door de AD",
-    totalHours: 3,
-    totalCosts: 0,
-    trainer: "MARIEKE C."
-  },
-  {
-    id: 50,
     title: "TOS en comorbiditeit: ADHD",
     category: 'Collega',
     description: "Op verzoek van jullie naar aanleiding van de opbrengsten van het Expertise Café in oktober!\n\nTOS komt regelmatig voor in combinatie met andere diagnoses (comorbiditeit). In deze bijeenkomst verkennen we TOS en ADHD.\n\nWe bespreken de diagnose ADHD vanuit de DSM-5 en kijken vervolgens naar de comorbiditeit TOS en ADHD vanuit het perspectief van de Commissie van Onderzoek (CvO) en Siméa. Aan de hand van eigen praktijkvoorbeelden onderzoeken we waar TOS ophoudt en andere problematiek begint.\nNa afloop heb je meer zicht op de grenzen van een ondersteuningsarrangementen vanuit de TOS en wanneer scholen aan zet zijn. De bijeenkomst wordt extra waardevol als je vanuit je eigen caseload vragen meeneemt.",
@@ -845,7 +826,14 @@ export const courses: Course[] = [
     costs: "Gedragen door de AD",
     totalHours: 3,
     totalCosts: 0,
-    trainer: "MARIEKE C."
+    trainer: "MARIEKE L."
+  },targetAudience: "Alle medewerkers",
+    duration: "2 uur op locatie bij AD Nijmegen + 1 uur online borgingsbijeenkomst",
+    location: "AD Nijmegen",
+    costs: "Gedragen door de AD",
+    totalHours: 3,
+    totalCosts: 0,
+    trainer: "MARIEKE L."
   },
   {
     id: 51,
@@ -858,7 +846,7 @@ export const courses: Course[] = [
     costs: "Gedragen door de AD",
     totalHours: 3,
     totalCosts: 0,
-    trainer: "MARIEKE C."
+    trainer: "MARIEKE L."
   },
   {
     id: 52,
@@ -884,7 +872,7 @@ export const courses: Course[] = [
     costs: "0 euro",
     totalHours: 4,
     totalCosts: 0,
-    trainer: "MARIEKE C."
+    trainer: "MARIEKE L."
   },
   {
     id: 54,
@@ -897,7 +885,7 @@ export const courses: Course[] = [
     costs: "0 euro",
     totalHours: 4,
     totalCosts: 0,
-    trainer: "MARIEKE C."
+    trainer: "MARIEKE L."
   },
   {
     id: 55,
